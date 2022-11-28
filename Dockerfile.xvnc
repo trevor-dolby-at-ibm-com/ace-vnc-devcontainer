@@ -40,5 +40,8 @@ RUN cd /opt && \
 #
 # http://localhost:6080/vnc.html?host=localhost&port=6080
 #
-RUN apt install -y openssh-server tightvncserver novnc icewm
+RUN apt install -y openssh-server tightvncserver novnc icewm libswt-gtk-4-jni libswt-gtk-4-java
 # RUN apt install -y openssh-server xfce4 xfce4-goodies tightvncserver novnc icewm
+
+COPY run-vnc.sh /usr/local/bin/run-vnc.sh
+RUN chmod 775 /usr/local/bin/run-vnc.sh

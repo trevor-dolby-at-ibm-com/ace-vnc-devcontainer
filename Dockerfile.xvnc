@@ -1,0 +1,44 @@
+FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
+
+MAINTAINER Trevor Dolby <trevor.dolby@ibm.com> (@trevor-dolby-at-ibm-com)
+
+# Build:
+#
+# docker build -t ace-devcontainer-xvnc:12.0.4.0 -f Dockerfile.xvnc .
+
+ARG USERNAME
+ARG PASSWORD
+ARG DOWNLOAD_URL=http://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/12.0.4.0-ACE-LINUX64-DEVELOPER.tar.gz
+ARG PRODUCT_LABEL=ace-12.0.4.0
+
+# Prevent errors about having no terminal when using apt-get
+ENV DEBIAN_FRONTEND noninteractive
+
+# Install ACE and accept the license
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    mkdir /opt/ibm && \
+    echo Downloading package ${DOWNLOAD_URL} && \
+    curl ${DOWNLOAD_URL} | tar zx --directory /opt/ibm && \
+    mv /opt/ibm/${PRODUCT_LABEL} /opt/ibm/ace-12 && \
+    /opt/ibm/ace-12/ace make registry global accept license deferred
+
+# Source profile automatically
+RUN usermod -a -G mqbrkrs vscode \
+  && echo ". /opt/ibm/ace-12/server/bin/mqsiprofile" >> /home/vscode/.bashrc \ 
+  && echo ". /opt/ibm/ace-12/server/bin/mqsiprofile" >> /home/vscode/.profile
+
+# Install Maven for development use.
+#
+# The standard Maven packages on most distros bring a lot of extra packages with
+# them so we install Maven directly. 
+RUN cd /opt && \
+    curl -k https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz | tar -xzf - && \
+    ln -s /opt/apache-maven-3.8.4/bin/mvn /usr/local/bin/mvn
+
+# vncserver -geometry 1280x1024
+# /usr/share/novnc/utils/launch.sh --vnc localhost:5901 &
+#
+# http://localhost:6080/vnc.html?host=localhost&port=6080
+#
+RUN apt install -y openssh-server tightvncserver novnc icewm
+# RUN apt install -y openssh-server xfce4 xfce4-goodies tightvncserver novnc icewm

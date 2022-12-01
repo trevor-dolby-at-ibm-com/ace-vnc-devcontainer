@@ -17,7 +17,10 @@ ACE v12 can be run in a codespace using containers from [ace-docker](https://git
 but those containers are intended for command-line use in conjunction with vscode. This
 container allows the use of the toolkit without any need to install anything locally.
 
-The main 
+The main additions are
+- An X-Windows server to be used by the toolkit GUI
+- A VNC server that allows VNC clients to access the X-Windows desktop
+- A VNC client that runs in a browser and can connect to the VNC server
 
 ## Building
 

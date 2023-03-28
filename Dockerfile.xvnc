@@ -4,18 +4,24 @@ MAINTAINER Trevor Dolby <trevor.dolby@ibm.com> (@trevor-dolby-at-ibm-com)
 
 # Build:
 #
-# docker build -t ace-devcontainer-xvnc:12.0.4.0 -f Dockerfile.xvnc .
+# docker build -t ace-devcontainer-xvnc:12.0.8.0 -f Dockerfile.xvnc .
 
-ARG DOWNLOAD_URL=http://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/12.0.4.0-ACE-LINUX64-DEVELOPER.tar.gz
+# Later versions from the same site, or else via the Developer edition download site linked from
+# https://www.ibm.com/docs/en/app-connect/12.0?topic=enterprise-download-ace-developer-edition-get-started
+ARG DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/12.0.8.0-ACE-LINUX64-DEVELOPER.tar.gz
+# Can be set higher if needed
+ARG DOWNLOAD_CONNECTION_COUNT=1
 
 # Prevent errors about having no terminal when using apt-get
 ENV DEBIAN_FRONTEND noninteractive
 
 # Install ACE and accept the license
-RUN apt-get update && apt-get install -y --no-install-recommends curl && \
-    mkdir /opt/ibm && \
-    echo Downloading package ${DOWNLOAD_URL} && \
-    curl ${DOWNLOAD_URL} | tar zx --directory /opt/ibm && \
+RUN apt-get update && apt-get install -y --no-install-recommends aria2 && \
+    mkdir /opt/ibm && echo Downloading package ${DOWNLOAD_URL} && \
+    cd /tmp && \
+    aria2c -s ${DOWNLOAD_CONNECTION_COUNT} -j ${DOWNLOAD_CONNECTION_COUNT} -x ${DOWNLOAD_CONNECTION_COUNT} "${DOWNLOAD_URL}" && \
+    tar -zxf *12.0*tar.gz --directory /opt/ibm && \
+    rm -f *12.0*tar.gz && \
     mv /opt/ibm/ace-12.* /opt/ibm/ace-12 && \
     /opt/ibm/ace-12/ace make registry global accept license deferred
 
@@ -29,7 +35,9 @@ RUN usermod -a -G mqbrkrs vscode \
 # The standard Maven packages on most distros bring a lot of extra packages with
 # them so we install Maven directly. 
 RUN cd /opt && \
-    curl -k https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz | tar -xzf - && \
+    aria2c -s ${DOWNLOAD_CONNECTION_COUNT} -j ${DOWNLOAD_CONNECTION_COUNT} -x ${DOWNLOAD_CONNECTION_COUNT} https://archive.apache.org/dist/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz && \
+    tar -xzf apache-maven-3.8.4-bin.tar.gz && \
+    rm apache-maven-3.8.4-bin.tar.gz && \
     ln -s /opt/apache-maven-3.8.4/bin/mvn /usr/local/bin/mvn
 
 # vncserver -geometry 1280x1024

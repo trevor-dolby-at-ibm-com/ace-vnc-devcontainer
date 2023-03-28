@@ -34,6 +34,10 @@ docker build -t ace-devcontainer-xvnc:12.0.4.0 -f Dockerfile.xvnc .
 followed by tagging and pushing the container. The resulting public image tag should be 
 used in the configuration below instead of the experimental image shown.
 
+Note that later versions are available; see https://github.com/trevor-dolby-at-ibm-com/ace-docker/tree/main/experimental#setting-the-correct-product-url
+for instructions on how to find the URL if the public site has not been updated. Use the
+resulting URL as the DOWNLOAD_URL build argument when building the container.
+
 ## Application repo setup
 
 Codespace configurations are held in the .devcontainer directory of the repo containing
@@ -46,7 +50,7 @@ file should contain something like
 ```
 {
     "name": "ace-bdd-cucumber-devcontainer",
-    "image": "tdolby/experimental:ace-devcontainer-xvnc-12.0.7.0",
+    "image": "tdolby/experimental:ace-devcontainer-xvnc-12.0.8.0",
     "containerEnv": {
         "LICENSE": "accept"
     },
@@ -55,7 +59,7 @@ file should contain something like
     }
 }
 ```
-to instruct the codespaces runtime to load the `tdolby/experimental:ace-devcontainer-xvnc-12.0.7.0` container
+to instruct the codespaces runtime to load the `tdolby/experimental:ace-devcontainer-xvnc-12.0.8.0` container
 (the name should be changed to match the container built earlier (see above)) and the license must be accepted 
 for the product to work correctly.
 
@@ -80,7 +84,10 @@ follow the link in the browser:
 
 ![server startup](/files/vnc-codespace-port-6080.png)
 
-This page is a directory, and the `vnc.html` page is the one we need to gain access to VNC:
+If there are no pop-ups (as seems to happen in some cases for unknown reasons), the port can be forwarded
+manually from the the "PORTS" tab using the "Forward a Port" button and entering 6080.
+
+The port 6080 default page is a directory, and the `vnc.html` page is the one we need to gain access to VNC:
 
 ![vnc page](/files/vnc-codespace-vnc-html.png)
 

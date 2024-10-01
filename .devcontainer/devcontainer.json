@@ -1,6 +1,6 @@
 {
     "name": "ace-vnc-devcontainer",
-    "image": "tdolby/experimental:ace-devcontainer-xvnc-12.0.4.0",
+    "image": "tdolby/experimental:ace-devcontainer-xvnc-13.0.1.0",
     "containerEnv": {
         "LICENSE": "accept"
     },

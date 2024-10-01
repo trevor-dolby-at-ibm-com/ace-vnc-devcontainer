@@ -1,10 +1,10 @@
-FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
+FROM mcr.microsoft.com/devcontainers/base:ubuntu-24.04
 
 MAINTAINER Trevor Dolby <trevor.dolby@ibm.com> (@trevor-dolby-at-ibm-com)
 
 # Build:
 #
-# docker build -t ace-devcontainer-xvnc:12.0.10.0 -f Dockerfile.xvnc .
+# docker build -t ace-devcontainer-xvnc:13.0.1.0 -f Dockerfile.xvnc .
 
 # Later versions from the same site, or else via the Developer edition download site linked from
 # https://www.ibm.com/docs/en/app-connect/12.0?topic=enterprise-download-ace-developer-edition-get-started
@@ -20,15 +20,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends aria2 && \
     mkdir /opt/ibm && echo Downloading package ${DOWNLOAD_URL} && \
     cd /tmp && \
     aria2c -s ${DOWNLOAD_CONNECTION_COUNT} -j ${DOWNLOAD_CONNECTION_COUNT} -x ${DOWNLOAD_CONNECTION_COUNT} "${DOWNLOAD_URL}" && \
-    tar -zxf *12.0*tar.gz --directory /opt/ibm && \
-    rm -f *12.0*tar.gz && \
-    mv /opt/ibm/ace-12.* /opt/ibm/ace-12 && \
-    /opt/ibm/ace-12/ace make registry global accept license deferred
+    tar -zxf *13.0*tar.gz --directory /opt/ibm && \
+    rm -f *13.0*tar.gz && \
+    mv /opt/ibm/ace-13.* /opt/ibm/ace-13 && \
+    /opt/ibm/ace-13/ace make registry global accept license deferred
 
 # Source profile automatically
 RUN usermod -a -G mqbrkrs vscode \
-  && echo ". /opt/ibm/ace-12/server/bin/mqsiprofile" >> /home/vscode/.bashrc \ 
-  && echo ". /opt/ibm/ace-12/server/bin/mqsiprofile" >> /home/vscode/.profile
+  && echo ". /opt/ibm/ace-13/server/bin/mqsiprofile" >> /home/vscode/.bashrc \ 
+  && echo ". /opt/ibm/ace-13/server/bin/mqsiprofile" >> /home/vscode/.profile
 
 # Install Maven for development use.
 #

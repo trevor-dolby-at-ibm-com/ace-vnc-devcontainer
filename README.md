@@ -1,6 +1,6 @@
 # ace-vnc-devcontainer
 
-Toolkit-enabled codespaces container for ACE v12
+Toolkit-enabled codespaces container for ACE v12/v13
 
 ## Background
 
@@ -13,7 +13,7 @@ writing), and a codespace can be launched from the "Code" menu:
 
 ![Codespaces launch](/files/codespaces-launch.png)
 
-ACE v12 can be run in a codespace using containers from [ace-docker](https://github.com/trevor-dolby-at-ibm-com/ace-docker/tree/main/experimental/devcontainers)
+ACE v12/v13 can be run in a codespace using containers from [ace-docker](https://github.com/ot4i/ace-docker/tree/main/experimental/devcontainers)
 but those containers are intended for command-line use in conjunction with vscode. This
 container allows the use of the toolkit without any need to install anything locally.
 
@@ -29,7 +29,7 @@ repository; there are containers under tdolby/experimental on dockerhub but thes
 not be relied upon to stay around and/or work at all.
 
 ```
-docker build -t ace-devcontainer-xvnc:12.0.4.0 -f Dockerfile.xvnc .
+docker build -t ace-devcontainer-xvnc:13.0.1.0 -f Dockerfile.xvnc .
 ```
 followed by tagging and pushing the container. The resulting public image tag should be 
 used in the configuration below instead of the experimental image shown.
@@ -50,7 +50,7 @@ file should contain something like
 ```
 {
     "name": "ace-bdd-cucumber-devcontainer",
-    "image": "tdolby/experimental:ace-devcontainer-xvnc-12.0.8.0",
+    "image": "tdolby/experimental:ace-devcontainer-xvnc-13.0.1.0",
     "containerEnv": {
         "LICENSE": "accept"
     },
@@ -59,7 +59,7 @@ file should contain something like
     }
 }
 ```
-to instruct the codespaces runtime to load the `tdolby/experimental:ace-devcontainer-xvnc-12.0.8.0` container
+to instruct the codespaces runtime to load the `tdolby/experimental:ace-devcontainer-xvnc-13.0.1.0` container
 (the name should be changed to match the container built earlier (see above)) and the license must be accepted 
 for the product to work correctly.
 
@@ -93,10 +93,10 @@ The port 6080 default page is a directory, and the `vnc.html` page is the one we
 
 This page will have a "connect" button which will connect to the VNC server, at which point the password
 entered earlier will be needed to access the virtual X-Windows desktop. Right-clicking on the background
-will allow a terminal to be launched, and the ACE product is in /opt/ibm/ace-12 so running
+will allow a terminal to be launched, and the ACE product is in /opt/ibm/ace-13 so running
 
 ```
-/opt/ibm/ace-12/ace tools
+/opt/ibm/ace-13/ace tools
 ```
 will bring up the toolkit.
 

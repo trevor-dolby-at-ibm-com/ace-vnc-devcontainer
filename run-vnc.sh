@@ -8,4 +8,5 @@ unset PROSPECTIVE_MQSI_BASE_FILEPATH
 vncserver -geometry 1600x1200
 
 # Start the port forwarder on port 6080
-/usr/share/novnc/utils/launch.sh --vnc localhost:5901 &
+#/usr/share/novnc/utils/launch.sh --vnc localhost:5901 &
+/usr/share/novnc/utils/novnc_proxy --vnc localhost:5901 &

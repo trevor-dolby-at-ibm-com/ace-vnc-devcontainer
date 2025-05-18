@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ace-full-xvnc
+spec:
+  selector:
+    matchLabels:
+      app: ace-full-xvnc
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ace-full-xvnc
+      annotations:
+        productName: "IBM App Connect Enterprise for non-production"
+        productID: eb5b5e73f62b4dcf8c434c6274a158a7
+        productMetric: FREE
+    spec:
+      containers:
+      - name: ace-full-xvnc
+        imagePullPolicy: Always
+        image: quay.io/trevor_dolby/ace-full-xvnc:13.0.3.0
+        env:
+        - name: VNCPASSWORD
+          value: 'passw0rd'
+        - name: LICENSE
+          value: 'accept'
+        - name: HOME
+          value: '/home/aceuser'
+        ports:
+        - containerPort: 6080
+        volumeMounts:
+          - mountPath: /home/aceuser
+            name: homeaceuser
+      volumes:
+        - name: homeaceuser
+          persistentVolumeClaim:
+            claimName: ace-full-xvnc-pvc

@@ -52,8 +52,11 @@ using the pod name started by the deployment.
 ## Starting the toolkit
 
 Once the container is started, it should be running a web server on port 6080
-that can be used to access the X-Windows desktop. The port 6080 default page 
-is a directory, and the `vnc.html` page is the one we need to gain access to VNC:
+that can be used to access the X-Windows desktop as http://localhost:6080/vnc.html
+assuming port forwarding as shown above.
+
+The port 6080 default page is a directory, and the `vnc.html` page is the one we
+need to gain access to VNC:
 
 ![vnc page](/files/vnc-codespace-vnc-html.png)
 

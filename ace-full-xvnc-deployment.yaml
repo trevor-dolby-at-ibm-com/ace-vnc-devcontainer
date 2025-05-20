@@ -29,10 +29,10 @@ spec:
           value: '/home/aceuser'
         ports:
         - containerPort: 6080
-        volumeMounts:
-          - mountPath: /home/aceuser
-            name: homeaceuser
-      volumes:
-        - name: homeaceuser
-          persistentVolumeClaim:
-            claimName: ace-full-xvnc-pvc
+#        volumeMounts:
+#          - mountPath: /home/aceuser
+#            name: homeaceuser
+#      volumes:
+#        - name: homeaceuser
+#          persistentVolumeClaim:
+#            claimName: ace-full-xvnc-pvc

@@ -19,7 +19,8 @@ spec:
       containers:
       - name: ace-full-xvnc
         imagePullPolicy: Always
-        image: quay.io/trevor_dolby/ace-full-xvnc:13.0.7.0
+#        image: docker.io/tdolby/experimental:ace-full-xvnc-13.0.7.0-ubuntu
+        image: quay.io/trevor_dolby/ace-full-xvnc:13.0.7.0-ubuntu
         env:
         - name: VNCPASSWORD
           value: 'passw0rd'

@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ace-full-xvnc
+spec:
+  ports:
+    - protocol: TCP
+      port: 6080
+      targetPort: 6080
+  selector:
+    app: ace-full-xvnc

@@ -1,0 +1,13 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ace-full-xvnc-https
+spec:
+  to:
+    kind: Service
+    name: ace-full-xvnc
+    weight: 100
+  port:
+    targetPort: '6080'
+  tls:
+    termination: edge

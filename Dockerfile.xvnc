@@ -4,13 +4,17 @@ MAINTAINER Trevor Dolby <trevor.dolby@ibm.com> (@trevor-dolby-at-ibm-com)
 
 # Build:
 #
-# docker build -t ace-devcontainer-xvnc:13.0.1.0 -f Dockerfile.xvnc .
+# docker build -t ace-devcontainer-xvnc:13.0.8.0 -f Dockerfile.xvnc .
 
 # Later versions from the same site, or else via the Developer edition download site linked from
 # https://www.ibm.com/docs/en/app-connect/12.0?topic=enterprise-download-ace-developer-edition-get-started
-ARG DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/12.0.10.0-ACE-LINUX64-DEVELOPER.tar.gz
+ARG DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/13.0.8.0-ACE-LINUX64-EVALUATION.tar.gz
+
 # Can be set higher if needed
 ARG DOWNLOAD_CONNECTION_COUNT=1
+
+# Override for local builds
+ARG COMPANY_NAME=ace-devcontainer-xvnc
 
 # Prevent errors about having no terminal when using apt-get
 ENV DEBIAN_FRONTEND noninteractive
@@ -23,7 +27,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends aria2 && \
     tar -zxf *13.0*tar.gz --directory /opt/ibm && \
     rm -f *13.0*tar.gz && \
     mv /opt/ibm/ace-13.* /opt/ibm/ace-13 && \
-    /opt/ibm/ace-13/ace make registry global accept license deferred
+    /opt/ibm/ace-13/ace accept license --silently --make-registry-global --company-name "${COMPANY_NAME}" && \
+    sed -i "s|LICENSE_ACCEPTED=1|LICENSE_ACCEPTED=2|g" /opt/ibm/ace-13/server/bin/mqsiprofile
 
 # Source profile automatically
 RUN usermod -a -G mqbrkrs vscode \

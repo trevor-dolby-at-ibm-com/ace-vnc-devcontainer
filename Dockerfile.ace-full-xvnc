@@ -1,15 +1,19 @@
 FROM ubuntu:24.04
 MAINTAINER Trevor Dolby <trevor.dolby@ibm.com> (@trevor-dolby-at-ibm-com)
 
-# docker build -t ace-full-xvnc:13.0.7.0-ubuntu -f Dockerfile.ace-full-xvnc .
+# docker build -t ace-full-xvnc:13.0.8.0-ubuntu -f Dockerfile.ace-full-xvnc .
 
 
 # Later versions from the same site, or else via the Developer edition download site linked from
 # https://www.ibm.com/docs/en/app-connect/12.0?topic=enterprise-download-ace-developer-edition-get-started
-ARG DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/13.0.7.0-ACE-LINUX64-EVALUATION.tar.gz
-ARG MQ_DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/redist/9.4.5.0-IBM-MQC-Redist-LinuxX64.tar.gz
+#ARG DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/13.0.7.0-ACE-LINUX64-EVALUATION.tar.gz
+ARG DOWNLOAD_URL=http://192.168.1.70:49177/ace/13.0.8.0-ACE-LINUX64-EVALUATION.tar.gz
+ARG MQ_DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/redist/10.0.0.0-IBM-MQC-Redist-LinuxX64.tar.gz
 # Can be set higher if needed
 ARG DOWNLOAD_CONNECTION_COUNT=1
+
+# Override for local builds
+ARG COMPANY_NAME=ace-full-xvnc
 
 # Prevent errors about having no terminal when using apt-get
 ENV DEBIAN_FRONTEND=noninteractive
@@ -23,7 +27,8 @@ RUN apt-get update && apt-get install -y aria2 curl && \
     tar -zxf *13.0*tar.gz --directory /opt/ibm && \
     rm -f *13.0*tar.gz && \
     mv /opt/ibm/ace-13* /opt/ibm/ace-13 && \
-    /opt/ibm/ace-13/ace make registry global accept license deferred
+    /opt/ibm/ace-13/ace accept license --silently --make-registry-global --company-name "${COMPANY_NAME}" && \
+    sed -i "s|LICENSE_ACCEPTED=1|LICENSE_ACCEPTED=2|g" /opt/ibm/ace-13/server/bin/mqsiprofile
 
 # Configure the system
 RUN echo "ACE_13:" > /etc/debian_chroot \
@@ -35,8 +40,9 @@ RUN mkdir /opt/mqm && curl ${MQ_DOWNLOAD_URL} | tar zx --exclude=tools --directo
 # Install various Kubernetes tools
 RUN cd /usr/local/bin && curl -LO https://dl.k8s.io/release/v1.35.3/bin/linux/amd64/kubectl && \
     curl -L https://github.com/tektoncd/cli/releases/download/v0.37.4/tkn_0.37.4_Linux_x86_64.tar.gz | tar -xzvf - tkn && \
-    curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux-4.21.7.tar.gz | tar -xzvf - oc && \
+    curl -L https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz | tar -xzvf - oc && \
     chmod 775 /usr/local/bin/*
+
 
 # mqsicreatebar prereqs; need to run "Xvfb -ac :99 &" and "export DISPLAY=:99"
 RUN apt-get -y install libgtk2.0-0 libxtst6 xvfb libswt-gtk-4-java
@@ -69,6 +75,9 @@ RUN chmod 775 /usr/local/bin/container-startup.sh
 
 # Copy the home directory off so it can be restored into a PVC if needed
 RUN cd /home/aceuser && tar -cf /tmp/home-aceuser.tar .
+
+# Useful for Java builds without the toolkit
+RUN apt-get install -y maven
 
 EXPOSE 6080
 

@@ -4,11 +4,12 @@ MAINTAINER Trevor Dolby <trevor.dolby@ibm.com> (@trevor-dolby-at-ibm-com)
 
 # Build:
 #
-# docker build -t ace-devcontainer-xvnc:13.0.8.0 -f Dockerfile.xvnc .
+# docker build -t ace-devcontainer-xvnc:13.0.9.0 -f Dockerfile.xvnc .
 
 # Later versions from the same site, or else via the Developer edition download site linked from
 # https://www.ibm.com/docs/en/app-connect/12.0?topic=enterprise-download-ace-developer-edition-get-started
-ARG DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/13.0.8.0-ACE-LINUX64-EVALUATION.tar.gz
+#ARG DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/13.0.9.0-ACE-LINUX64-EVALUATION.tar.gz
+ARG DOWNLOAD_URL=http://192.168.1.70:49177/ace/13.0.9.0-ACE-LINUX64-EVALUATION.tar.gz
 
 # Can be set higher if needed
 ARG DOWNLOAD_CONNECTION_COUNT=1

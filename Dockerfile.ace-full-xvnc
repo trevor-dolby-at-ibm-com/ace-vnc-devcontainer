@@ -1,13 +1,13 @@
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 MAINTAINER Trevor Dolby <trevor.dolby@ibm.com> (@trevor-dolby-at-ibm-com)
 
-# docker build -t ace-full-xvnc:13.0.8.0-ubuntu -f Dockerfile.ace-full-xvnc .
+# docker build -t ace-full-xvnc:13.0.9.0-ubuntu -f Dockerfile.ace-full-xvnc .
 
 
 # Later versions from the same site, or else via the Developer edition download site linked from
 # https://www.ibm.com/docs/en/app-connect/12.0?topic=enterprise-download-ace-developer-edition-get-started
-#ARG DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/13.0.7.0-ACE-LINUX64-EVALUATION.tar.gz
-ARG DOWNLOAD_URL=http://192.168.1.70:49177/ace/13.0.8.0-ACE-LINUX64-EVALUATION.tar.gz
+#ARG DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/integration/13.0.9.0-ACE-LINUX64-EVALUATION.tar.gz
+ARG DOWNLOAD_URL=http://192.168.1.70:49177/ace/13.0.9.0-ACE-LINUX64-EVALUATION.tar.gz
 ARG MQ_DOWNLOAD_URL=https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/messaging/mqdev/redist/10.0.0.0-IBM-MQC-Redist-LinuxX64.tar.gz
 # Can be set higher if needed
 ARG DOWNLOAD_CONNECTION_COUNT=1
@@ -64,7 +64,7 @@ RUN chmod -R 777 /home/aceuser /var/mqsi || /bin/true
 #
 # http://localhost:6080/vnc.html?host=localhost&port=6080
 #
-RUN apt install -y openssh-server tightvncserver novnc icewm libswt-gtk-4-jni libswt-gtk-4-java
+RUN apt install -y openssh-server tightvncserver novnc icewm libswt-gtk-4-jni libswt-gtk-4-java xterm eterm
 
 
 COPY run-vnc.sh /usr/local/bin/run-vnc.sh
